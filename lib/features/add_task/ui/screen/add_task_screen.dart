@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/widgets/custom_app_bar.dart';
+
 class AddTaskScreen extends StatelessWidget {
   const AddTaskScreen({super.key});
 
@@ -7,7 +9,12 @@ class AddTaskScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return  SafeArea(
       child: Scaffold(
-        body: Container(),
+        body: Column(
+          children: [
+            const CustomAppBar(title: "tic tac toe",),
+            Container(),
+          ],
+        ),
       ),
     );
   }
