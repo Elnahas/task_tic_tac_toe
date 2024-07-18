@@ -46,11 +46,15 @@ class _AddTaskFormState extends State<AddTaskForm> {
     return Column(
       children: [
         AppTextFormField(
-            labelText: "Number of task", controller: numberOfTaskController),
+          labelText: "Number of task",
+          controller: numberOfTaskController,
+          keyboardType: TextInputType.number,
+        ),
         verticalSpace(20),
         AppTextFormField(
             labelText: "Sequence of task",
-            controller: sequenceOfTaskController),
+            controller: sequenceOfTaskController,
+            keyboardType: TextInputType.number),
         verticalSpace(20),
         ValueListenableBuilder<bool>(
           valueListenable: isButtonEnabled,
@@ -61,7 +65,6 @@ class _AddTaskFormState extends State<AddTaskForm> {
             );
           },
         ),
-
       ],
     );
   }
