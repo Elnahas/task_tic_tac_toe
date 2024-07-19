@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/data/model/task_model.dart';
+import '../../../../core/helpers/date_helper.dart';
 
 class TaskItem extends StatelessWidget {
   final TaskModel taskModel;
@@ -19,7 +20,7 @@ class TaskItem extends StatelessWidget {
       child: ListTile(
         
         title: Text(taskModel.title),
-        trailing:  Text(taskModel.dueTime.seconds.toString()),
+        trailing:  Text(DateHelper.formatTimestampToMinutesAndSeconds(taskModel.dueTime.toDate())),
       ),
     );
   }
