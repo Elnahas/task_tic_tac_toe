@@ -16,9 +16,8 @@ class _TaskStatusListViewState extends State<TaskStatusListView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        height: 55.h,
+    return SizedBox(
+        height: 60.h,
         width: double.infinity,
         child: ListView.builder(
           physics: const BouncingScrollPhysics(),
