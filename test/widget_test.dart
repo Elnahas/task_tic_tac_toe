@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:task_tic_tac_toe/app/my_app.dart';
 
 import 'package:task_tic_tac_toe/main.dart';
 
