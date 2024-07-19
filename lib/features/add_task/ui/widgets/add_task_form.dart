@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_tic_tac_toe/features/add_task/logic/add_task_cubit.dart';
+import 'package:task_tic_tac_toe/features/add_task/ui/widgets/add_task_bloc_listener.dart';
 
 import '../../../../core/helpers/spacing.dart';
 import '../../../../core/widgets/app_elevated_button.dart';
@@ -68,30 +69,29 @@ class _AddTaskFormState extends State<AddTaskForm> {
             return AppElevatedButton(
               onPressed: isEnabled
                   ? () {
-                      final numberOfTasks =
-                          int.tryParse(numberOfTaskController.text) ?? 0;
-                      final interval =
-                          int.tryParse(sequenceOfTaskController.text) ?? 0;
-
-                      if (numberOfTasks > 0 && interval > 0) {
-                        _cubit.createTasks(
-                            numberOfTasks:
-                                int.parse(numberOfTaskController.text),
-                            sequenceOfTasks:
-                                int.parse(sequenceOfTaskController.text));
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text(
-                                    'Please fill in all fields correctly')));
-                      }
+                      validateToAddTasks();
                     }
                   : null,
               buttonText: "Go",
             );
           },
         ),
+        const AddTaskBlocListener()
       ],
     );
+  }
+
+  void validateToAddTasks() {
+    final numberOfTasks = int.tryParse(numberOfTaskController.text) ?? 0;
+    final interval = int.tryParse(sequenceOfTaskController.text) ?? 0;
+
+    if (numberOfTasks > 0 && interval > 0) {
+      _cubit.createTasks(
+          numberOfTasks: int.parse(numberOfTaskController.text),
+          sequenceOfTasks: int.parse(sequenceOfTaskController.text));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please fill in all fields correctly')));
+    }
   }
 }
