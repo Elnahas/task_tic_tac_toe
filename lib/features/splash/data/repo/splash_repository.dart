@@ -1,7 +1,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 
-class SplashRepo {
+class SplashRepository {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<bool> checkUser() async {
