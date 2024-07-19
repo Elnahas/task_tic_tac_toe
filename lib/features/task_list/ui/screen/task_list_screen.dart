@@ -11,7 +11,8 @@ class TaskListScreen extends StatelessWidget {
       appBar: CustomAppBar(title: "tic tac toe"),
       body: Column(
         children: [
-          TaskStatusListView()
+          TaskStatusListView() ,
+          
         ],
       )
     );
