@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
 
 import '../data/enum/task_status.dart';
@@ -7,6 +8,7 @@ import '../helpers/constants.dart';
 
 class TaskRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> createTasks({
     required int numberOfTasks,
@@ -24,6 +26,8 @@ class TaskRepository {
         dueTime: dueTime,
       );
       await _firestore
+          .collection(FirestoreCollections.users)
+          .doc(_auth.currentUser!.uid)
           .collection(FirestoreCollections.tasks)
           .doc(taskId)
           .set(task.toJson());
