@@ -10,12 +10,12 @@ class TaskRepository {
 
   Future<void> createTasks({
     required int numberOfTasks,
-    required int interval,
+    required int sequenceOfTasks,
   }) async {
     final now = Timestamp.now();
     for (int i = 0; i < numberOfTasks; i++) {
       final dueTime = Timestamp.fromDate(
-          now.toDate().add(Duration(minutes: interval * (i + 1))));
+          now.toDate().add(Duration(minutes: sequenceOfTasks * (i + 1))));
       final taskId = const Uuid().v4();
       final task = TaskModel(
         id: taskId,
