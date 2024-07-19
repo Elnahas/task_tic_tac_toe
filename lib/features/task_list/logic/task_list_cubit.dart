@@ -8,12 +8,12 @@ class TaskListCubit extends Cubit<TaskListState> {
   final TaskRepository _repository;
   TaskListCubit(this._repository) : super(TaskListInitial());
 
-  Future<void> getTasks({String? status}) async {
+  Future<void> getTasks(String status) async {
     emit(TaskListLoading());
     try {
       var tasks = await _repository.getTasks(status);
       if (tasks.isEmpty) {
-        emit(TaskListNoResultsFound());
+        emit(TaskListNoResultsFound(status));
       } else {
         emit(TaskListSuccess(tasks));
       }

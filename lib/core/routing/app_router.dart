@@ -29,7 +29,7 @@ class AppRouter {
       case Routes.taskList:
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                  create: (context) => TaskListCubit(getIt())..getTasks(status: TaskStatus.values[0].name),
+                  create: (context) => TaskListCubit(getIt())..getTasks( TaskStatus.values[0].name),
                   child: const TaskListScreen(),
                 ));
       default:

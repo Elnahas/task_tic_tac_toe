@@ -31,7 +31,7 @@ class _TaskStatusListViewState extends State<TaskStatusListView> {
                 onTap: () {
                   if(selectedStateTaskIndex != index){
                   var status = TaskStatus.values[index].name;
-                  context.read<TaskListCubit>().getTasks(status: status);
+                  context.read<TaskListCubit>().getTasks( status);
                   selectedStateTaskIndex = index;
                   setState(() {});
                   }

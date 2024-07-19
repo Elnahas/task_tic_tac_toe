@@ -41,7 +41,7 @@ class TaskRepository {
           .doc(_auth.currentUser!.uid)
           .collection(FirestoreCollections.tasks);
 
-      query = query.where('status', isEqualTo: status);
+      query = query.where('status', isEqualTo: status).orderBy("title");
 
       QuerySnapshot<Object?> snapshot = await query.get();
 

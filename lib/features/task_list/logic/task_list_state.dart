@@ -12,7 +12,10 @@ final class TaskListSuccess extends TaskListState {
   TaskListSuccess(this.listTask);
 }
 
-final class TaskListNoResultsFound extends TaskListState {}
+final class TaskListNoResultsFound extends TaskListState {
+    final String status;
+  TaskListNoResultsFound(this.status);
+}
 
 final class TaskListFailure extends TaskListState {
   final String error;
