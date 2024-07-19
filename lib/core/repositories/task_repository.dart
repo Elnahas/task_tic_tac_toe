@@ -33,4 +33,27 @@ class TaskRepository {
           .set(task.toJson());
     }
   }
+
+  Future<List<TaskModel>> getTasks(String? status) async {
+    try {
+      Query query = _firestore
+          .collection(FirestoreCollections.users)
+          .doc(_auth.currentUser!.uid)
+          .collection(FirestoreCollections.tasks);
+
+      query = query.where('status', isEqualTo: status);
+
+      QuerySnapshot<Object?> snapshot = await query.get();
+
+      List<TaskModel> tasks = snapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return TaskModel.fromJson(data);
+      }).toList();
+
+      return tasks;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
