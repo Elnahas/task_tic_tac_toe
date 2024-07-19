@@ -6,10 +6,10 @@ import '../../../../core/theming/app_colors.dart';
 class TaskStatusItem extends StatelessWidget {
   const TaskStatusItem({
     super.key,
-    required this.selectedStateJobIndex, required this.index,
+    required this.selectedStateTaskIndex, required this.index,
   });
 
-  final int selectedStateJobIndex;
+  final int selectedStateTaskIndex;
   final int index;
 
   @override
@@ -21,7 +21,7 @@ class TaskStatusItem extends StatelessWidget {
         width: 100.w,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: selectedStateJobIndex == index
+          color: selectedStateTaskIndex == index
               ? AppColors.primaryColor
               : AppColors.white,
           boxShadow: [
@@ -36,7 +36,7 @@ class TaskStatusItem extends StatelessWidget {
         child: Center(
             child: Text(
           TaskStatus.values[index].name,
-          style:  TextStyle(color: selectedStateJobIndex == index? Colors.white : Colors.black) ,
+          style:  TextStyle(color: selectedStateTaskIndex == index? Colors.white : Colors.black) ,
         )));
   }
 }

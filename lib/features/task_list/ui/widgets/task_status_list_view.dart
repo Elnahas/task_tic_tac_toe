@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_tic_tac_toe/core/data/enum/task_status.dart';
+import 'package:task_tic_tac_toe/features/task_list/logic/task_list_cubit.dart';
 import 'package:task_tic_tac_toe/features/task_list/ui/widgets/task_status_item.dart';
 
 class TaskStatusListView extends StatefulWidget {
@@ -12,7 +14,7 @@ class TaskStatusListView extends StatefulWidget {
 }
 
 class _TaskStatusListViewState extends State<TaskStatusListView> {
-  int selectedStateJobIndex = 0;
+  int selectedStateTaskIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +29,15 @@ class _TaskStatusListViewState extends State<TaskStatusListView> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: GestureDetector(
                 onTap: () {
-                  selectedStateJobIndex = index;
+                  if(selectedStateTaskIndex != index){
+                  var status = TaskStatus.values[index].name;
+                  context.read<TaskListCubit>().getTasks(status: status);
+                  selectedStateTaskIndex = index;
                   setState(() {});
+                  }
                 },
                 child: TaskStatusItem(
-                    selectedStateJobIndex: selectedStateJobIndex, index: index),
+                    selectedStateTaskIndex: selectedStateTaskIndex, index: index),
               ),
             );
           },
