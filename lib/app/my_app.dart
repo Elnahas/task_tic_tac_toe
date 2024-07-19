@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_tic_tac_toe/core/routing/routes.dart';
 import 'package:task_tic_tac_toe/core/theming/app_colors.dart';
-
-import '../features/add_task/ui/screen/add_task_screen.dart';
+import '../core/routing/app_router.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AppRouter appRouter;
+  const MyApp({super.key, required this.appRouter});
 
 
   @override
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
             scaffoldBackgroundColor: AppColors.white,
             useMaterial3: true,
           ),
-          home: const AddTaskScreen(),
+          onGenerateRoute: appRouter.onGenerateRoute,
+          initialRoute: Routes.splash,
         );
       },
     );
