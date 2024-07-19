@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_tic_tac_toe/core/data/enum/task_status.dart';
 import 'package:task_tic_tac_toe/core/di/service_locator.dart';
 import 'package:task_tic_tac_toe/core/routing/routes.dart';
 import 'package:task_tic_tac_toe/features/add_task/logic/add_task_cubit.dart';
@@ -28,7 +29,7 @@ class AppRouter {
       case Routes.taskList:
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                  create: (context) => TaskListCubit(getIt()),
+                  create: (context) => TaskListCubit(getIt())..getTasks(status: TaskStatus.values[0].name),
                   child: const TaskListScreen(),
                 ));
       default:
