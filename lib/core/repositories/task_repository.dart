@@ -99,7 +99,32 @@ class TaskRepository {
           .doc(_auth.currentUser!.uid)
           .collection(FirestoreCollections.tasks)
           .doc(taskId)
-          .update({"is_archive": isArchive, "status": TaskStatus.unassigned.name});
+          .update(
+              {"is_archive": isArchive, "status": TaskStatus.unassigned.name});
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<TaskModel>> reloadTasks() async {
+    try {
+      QuerySnapshot<Object?> snapshot = await _firestore
+          .collection(FirestoreCollections.users)
+          .doc(_auth.currentUser!.uid)
+          .collection(FirestoreCollections.tasks)
+          .get();
+
+      List<TaskModel> tasks = snapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        data["id"] = doc.id;
+        return TaskModel.fromJson(data);
+      }).toList();
+
+      for (var task in tasks) {
+        await updateTaskArchive(task.id, false);
+      }
+
+      return tasks;
     } catch (e) {
       rethrow;
     }
