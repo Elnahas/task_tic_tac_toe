@@ -4,6 +4,7 @@ import 'package:task_tic_tac_toe/core/helpers/extensions.dart';
 import 'package:task_tic_tac_toe/core/theming/app_colors.dart';
 import 'package:task_tic_tac_toe/features/add_task/logic/add_task_cubit.dart';
 
+import '../../../../core/helpers/app_show_dialog.dart';
 import '../../../../core/routing/routes.dart';
 
 class AddTaskBlocListener extends StatelessWidget {
@@ -53,25 +54,6 @@ void setupSuccess(BuildContext context) {
 setupFailure(BuildContext context, String error) {
   context.pop();
 
-  showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          icon: const Icon(
-            Icons.error,
-            color: Colors.red,
-            size: 32,
-          ),
-          content: Text(error),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  context.pop();
-                },
-                child: const Text(
-                  "Ok",
-                ))
-          ],
-        );
-      });
+  appShowDialog(context, error);
 }
+

@@ -6,6 +6,7 @@ import 'package:task_tic_tac_toe/features/task_list/logic/task_list_cubit.dart';
 import 'package:task_tic_tac_toe/features/task_list/ui/widgets/task_list_view.dart';
 
 import '../../../../core/data/enum/task_status.dart';
+import '../../../../core/helpers/app_show_dialog.dart';
 import '../../../../core/theming/app_colors.dart';
 
 class TaskListBlocBuilder extends StatelessWidget {
@@ -15,7 +16,9 @@ class TaskListBlocBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<TaskListCubit, TaskListState>(
       listenWhen: (previous, current) =>
-          current is TaskListUpdated || current is TaskListUpdateLoading,
+          current is TaskListUpdated ||
+          current is TaskListUpdateLoading ||
+          current is TaskListFailure,
       listener: (context, state) {
         if (state is TaskListUpdateLoading) {
           showDialog(
@@ -26,7 +29,12 @@ class TaskListBlocBuilder extends StatelessWidget {
                       CircularProgressIndicator(color: AppColors.primaryColor),
                 );
               });
-        } else   if (state is TaskListUpdated) {
+              } else if (state is TaskListFailure) {
+                context.pop();
+                appShowDialog(context, state.error);
+
+              
+        } else if (state is TaskListUpdated) {
           context.pop();
         }
       },
@@ -35,15 +43,12 @@ class TaskListBlocBuilder extends StatelessWidget {
           buildWhen: (previous, current) =>
               current is TaskListSuccess ||
               current is TaskListLoading ||
-              current is TaskListFailure ||
               current is TaskListNoResultsFound,
           builder: (context, state) {
             if (state is TaskListLoading) {
               return setupLoading();
             } else if (state is TaskListSuccess) {
               return setupSuccess(state.listTask);
-            } else if (state is TaskListFailure) {
-              return setupFailure(state.error);
             } else if (state is TaskListNoResultsFound) {
               return setupEmpty(state.status);
             }
@@ -63,12 +68,6 @@ class TaskListBlocBuilder extends StatelessWidget {
 
   Widget setupSuccess(List<TaskModel> tasks) {
     return TaskListView(tasks: tasks);
-  }
-
-  Widget setupFailure(String error) {
-    return Center(
-      child: Text(error),
-    );
   }
 
   Widget setupEmpty(String status) {

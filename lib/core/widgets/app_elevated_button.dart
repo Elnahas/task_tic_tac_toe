@@ -6,7 +6,8 @@ import '../theming/app_colors.dart';
 class AppElevatedButton extends StatelessWidget {
     final String buttonText;
   final void Function()? onPressed;
-  const AppElevatedButton({super.key, required this.buttonText, this.onPressed});
+  final double? width;
+  const AppElevatedButton({super.key, required this.buttonText, this.onPressed, this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class AppElevatedButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.r),
             ),
-            minimumSize: Size(double.infinity, 50.w)),
+            minimumSize: Size(width ?? double.infinity, 50.h)),
         onPressed: onPressed,
         child:  Text(
           buttonText,
