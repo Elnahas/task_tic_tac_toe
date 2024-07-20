@@ -35,6 +35,7 @@ final class TaskListGameInProgress extends TaskListState {
 
 final class TaskListGameFinished extends TaskListState {
   final String winner;
+  final String taskId;
 
-  TaskListGameFinished({required this.winner});
+  TaskListGameFinished(this.taskId, {required this.winner});
 }

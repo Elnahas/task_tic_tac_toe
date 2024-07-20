@@ -19,8 +19,8 @@ class TaskListBlocBuilder extends StatelessWidget {
       listenWhen: (previous, current) =>
           current is TaskListUpdated ||
           current is TaskListUpdateLoading ||
-          current is TaskListFailure || 
-          current is TaskListGameFinished  ,
+          current is TaskListFailure ||
+          current is TaskListGameFinished,
       listener: (context, state) {
         if (state is TaskListUpdateLoading) {
           showDialog(
@@ -34,18 +34,25 @@ class TaskListBlocBuilder extends StatelessWidget {
         } else if (state is TaskListFailure) {
           context.pop();
           appShowDialog(context, state.error);
-        }
-        else if (state is TaskListGameFinished) {
-          appShowDialog(context, state.winner == "Draw"
-                  ? 'It\'s a Draw!'
-                  : "Winner is Player ${state.winner}" , onPressed: () {
-                    context.pop();
-                    context.read<TaskListCubit>().initializeGame();
-                    context.read<TaskListCubit>().getTasks(context.read<TaskListCubit>().selectedStatus);
+        } else if (state is TaskListGameFinished) {
+          appShowDialog(
+            context,
+            state.winner == "Draw"
+                ? 'It\'s a Draw!'
+                : "Winner is Player ${state.winner}",
+            onPressed: () {
+              context.pop();
+              context.read<TaskListCubit>().initializeGame();
+              if (state.winner == "X") {
+                context
+                    .read<TaskListCubit>()
+                    .updateTask(state.taskId, TaskStatus.completed.name);
+              }
 
-                  },);
-        }
-         else if (state is TaskListUpdated) {
+              //context.read<TaskListCubit>().getTasks(context.read<TaskListCubit>().selectedStatus);
+            },
+          );
+        } else if (state is TaskListUpdated) {
           context.pop();
         }
       },
@@ -73,7 +80,7 @@ class TaskListBlocBuilder extends StatelessWidget {
 
   Widget setupLoading() {
     return const Expanded(
-      child:  Center(
+      child: Center(
         child: CircularProgressIndicator(),
       ),
     );
@@ -84,7 +91,7 @@ class TaskListBlocBuilder extends StatelessWidget {
       child: Column(
         children: [
           TaskListView(tasks: tasks),
-          const TicTacToeBoard(),
+          TicTacToeBoard(taskId: tasks.isEmpty ? "" : tasks[0].id),
         ],
       ),
     );

@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_tic_tac_toe/core/data/enum/task_status.dart';
+import 'package:task_tic_tac_toe/core/helpers/spacing.dart';
 import 'package:task_tic_tac_toe/features/task_list/logic/task_list_cubit.dart';
 
 class TicTacToeBoard extends StatefulWidget {
-  const TicTacToeBoard({super.key});
+
+  final String taskId ;
+  
+  const TicTacToeBoard({super.key, required this.taskId});
 
   @override
   State<TicTacToeBoard> createState() => _TicTacToeBoardState();
@@ -25,7 +29,9 @@ class _TicTacToeBoardState extends State<TicTacToeBoard> {
   Widget build(BuildContext context) {
     return _cubit.selectedStatus == TaskStatus.assigned.name ? Column(
       children: [
+        verticalSpace(20),
         Text("Player '${_cubit.currentPlayer}' Turn"),
+        verticalSpace(10),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -39,7 +45,7 @@ class _TicTacToeBoardState extends State<TicTacToeBoard> {
             return GestureDetector(
               onTap: () {
                 debugPrint("row ${row} + col ${col}");
-                context.read<TaskListCubit>().makeMove(row, col);
+                context.read<TaskListCubit>().makeMove(widget.taskId,row, col);
                 setState(() {});
               },
               child: Container(

@@ -9,10 +9,13 @@ class TaskListCubit extends Cubit<TaskListState> {
   final TaskRepository _repository;
   TaskListCubit(this._repository) : super(TaskListInitial());
   String selectedStatus = TaskStatus.values[0].name;
+  String selectedTaskAssignedId = "";
 
   //Tic tac toe
   static const int boardSize = 3;
-  List<List<String>> board = List.generate(boardSize, (_) => List.filled(boardSize, ''));  String currentPlayer = 'X';
+  List<List<String>> board =
+      List.generate(boardSize, (_) => List.filled(boardSize, ''));
+  String currentPlayer = 'X';
   bool gameFinished = false;
 
   Future<void> getTasks(String status) async {
@@ -53,7 +56,6 @@ class TaskListCubit extends Cubit<TaskListState> {
     return true;
   }
 
-
   void initializeGame() {
     board = List.generate(boardSize, (_) => List.filled(boardSize, ''));
     currentPlayer = 'X';
@@ -61,30 +63,31 @@ class TaskListCubit extends Cubit<TaskListState> {
     emit(TaskListGameInProgress(board: board, currentPlayer: currentPlayer));
   }
 
-  void makeMove(int row, int col) {
+  void makeMove(String taskId, int row, int col) {
     if (board[row][col].isEmpty && !gameFinished) {
       board[row][col] = currentPlayer;
       if (checkWinner(row, col)) {
         gameFinished = true;
-        emit(TaskListGameFinished(winner: currentPlayer));
+        emit(TaskListGameFinished(taskId, winner: currentPlayer));
       } else if (board.expand((e) => e).every((cell) => cell.isNotEmpty)) {
         gameFinished = true;
-        emit(TaskListGameFinished(winner: 'Draw'));
+        emit(TaskListGameFinished(taskId, winner: 'Draw'));
       } else {
         currentPlayer = currentPlayer == 'X' ? 'O' : 'X';
-        emit(TaskListGameInProgress(board: board, currentPlayer: currentPlayer));
+        emit(
+            TaskListGameInProgress(board: board, currentPlayer: currentPlayer));
         if (currentPlayer == 'O' && !gameFinished) {
-          makeComputerMove();
+          makeComputerMove(taskId);
         }
       }
     }
   }
 
-  void makeComputerMove() {
+  void makeComputerMove(String taskId) {
     for (int row = 0; row < boardSize; row++) {
       for (int col = 0; col < boardSize; col++) {
         if (board[row][col].isEmpty) {
-          makeMove(row, col);
+          makeMove(taskId, row, col);
           return;
         }
       }
