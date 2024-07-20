@@ -31,7 +31,19 @@ class _TicTacToeBoardState extends State<TicTacToeBoard> {
         ? Column(
             children: [
               verticalSpace(20),
-              Text("Player '${_cubit.currentPlayer}' Turn"),
+              RichText(
+                  text: TextSpan(children: [
+                TextSpan(
+                    text: "Player ",
+                    style: TextStyle(color: Colors.black, fontSize: 18.sp)),
+                TextSpan(
+                  text: "'${_cubit.currentPlayer}'",
+                  style: TextStyle(color: Colors.red, fontSize: 20.sp),
+                ),
+                TextSpan(
+                    text: " Turn",
+                    style: TextStyle(color: Colors.black, fontSize: 18.sp)),
+              ])),
               verticalSpace(10),
               GridView.builder(
                 shrinkWrap: true,
@@ -45,7 +57,6 @@ class _TicTacToeBoardState extends State<TicTacToeBoard> {
                   final col = index % 3;
                   return GestureDetector(
                     onTap: () {
-                      debugPrint("row ${row} + col ${col}");
                       context
                           .read<TaskListCubit>()
                           .makeMove(widget.taskModel, row, col);
@@ -57,7 +68,7 @@ class _TicTacToeBoardState extends State<TicTacToeBoard> {
                           borderRadius: BorderRadius.circular(10)),
                       child: Center(
                         child: Text(_cubit.board[row][col],
-                            style: TextStyle(fontSize: 40.sp)),
+                            style: TextStyle(fontSize: 40.sp , color: _cubit.board[row][col] == "X" ? Colors.blue : Colors.red )),
                       ),
                     ),
                   );
