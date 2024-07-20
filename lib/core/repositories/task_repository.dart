@@ -14,10 +14,13 @@ class TaskRepository {
     required int numberOfTasks,
     required int sequenceOfTasks,
   }) async {
-    final now = Timestamp.now();
+
     for (int i = 0; i < numberOfTasks; i++) {
+      DateTime now = DateTime.now();
       final dueTime = Timestamp.fromDate(
-          now.toDate().add(Duration(minutes: sequenceOfTasks * (i + 1))));
+        now.add(Duration(minutes: sequenceOfTasks * (i + 1))),
+      );
+
       final taskId = const Uuid().v4();
       final task = TaskModel(
         id: taskId,

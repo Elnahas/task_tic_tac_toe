@@ -36,10 +36,12 @@ class TaskListBlocBuilder extends StatelessWidget {
           appShowDialog(context, state.error);
         } else if (state is TaskListGameFinished) {
           appShowDialog(
-            context,
-            state.winner == "Draw"
-                ? 'It\'s a Draw!'
-                : "Winner is Player ${state.winner}",
+           context,
+            state.winner == 'TimeOut'
+                ? 'Time is ended try with another one!'
+                : (state.winner == "Draw"
+                    ? 'It\'s a Draw!'
+                    : "Winner is Player ${state.winner}"),
             onPressed: () {
               context.pop();
               context.read<TaskListCubit>().initializeGame();
@@ -91,7 +93,9 @@ class TaskListBlocBuilder extends StatelessWidget {
       child: Column(
         children: [
           TaskListView(tasks: tasks),
-          TicTacToeBoard(taskId: tasks.isEmpty ? "" : tasks[0].id),
+          if (tasks.isNotEmpty) ...[
+            TicTacToeBoard(taskModel: tasks[0]),
+          ],
         ],
       ),
     );

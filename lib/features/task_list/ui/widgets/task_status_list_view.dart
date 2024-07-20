@@ -33,6 +33,7 @@ class _TaskStatusListViewState extends State<TaskStatusListView> {
                   var status = TaskStatus.values[index].name;
                   context.read<TaskListCubit>().getTasks( status);
                   selectedStateTaskIndex = index;
+                   context.read<TaskListCubit>().initializeGame();
                   setState(() {});
                   }
                 },

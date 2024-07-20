@@ -38,4 +38,17 @@ final class TaskListGameFinished extends TaskListState {
   final String taskId;
 
   TaskListGameFinished(this.taskId, {required this.winner});
+
+
+
+}
+
+
+
+final class TaskListUpdateTimeLeft extends TaskListState {
+  final int minutesLeft;
+  final int secondsLeft;
+  final String taskId;
+
+  TaskListUpdateTimeLeft({required this.minutesLeft, required this.secondsLeft, required this.taskId});
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_tic_tac_toe/core/data/enum/task_status.dart';
 import 'package:task_tic_tac_toe/core/data/model/task_model.dart';
@@ -17,6 +19,9 @@ class TaskListCubit extends Cubit<TaskListState> {
       List.generate(boardSize, (_) => List.filled(boardSize, ''));
   String currentPlayer = 'X';
   bool gameFinished = false;
+
+  // Timer
+  Timer? _timer;
 
   Future<void> getTasks(String status) async {
     emit(TaskListLoading());
@@ -60,34 +65,36 @@ class TaskListCubit extends Cubit<TaskListState> {
     board = List.generate(boardSize, (_) => List.filled(boardSize, ''));
     currentPlayer = 'X';
     gameFinished = false;
-    emit(TaskListGameInProgress(board: board, currentPlayer: currentPlayer));
+    stopTimerForTask(selectedTaskAssignedId);
   }
 
-  void makeMove(String taskId, int row, int col) {
+  void makeMove(TaskModel taskModel, int row, int col) {
     if (board[row][col].isEmpty && !gameFinished) {
       board[row][col] = currentPlayer;
       if (checkWinner(row, col)) {
         gameFinished = true;
-        emit(TaskListGameFinished(taskId, winner: currentPlayer));
+        stopTimerForTask(taskModel.id);
+        emit(TaskListGameFinished(taskModel.id, winner: currentPlayer));
       } else if (board.expand((e) => e).every((cell) => cell.isNotEmpty)) {
         gameFinished = true;
-        emit(TaskListGameFinished(taskId, winner: 'Draw'));
+        stopTimerForTask(taskModel.id);
+        emit(TaskListGameFinished(taskModel.id, winner: 'Draw'));
       } else {
         currentPlayer = currentPlayer == 'X' ? 'O' : 'X';
         emit(
             TaskListGameInProgress(board: board, currentPlayer: currentPlayer));
         if (currentPlayer == 'O' && !gameFinished) {
-          makeComputerMove(taskId);
+          makeComputerMove(taskModel);
         }
       }
     }
   }
 
-  void makeComputerMove(String taskId) {
+  void makeComputerMove(TaskModel taskModel) {
     for (int row = 0; row < boardSize; row++) {
       for (int col = 0; col < boardSize; col++) {
         if (board[row][col].isEmpty) {
-          makeMove(taskId, row, col);
+          makeMove(taskModel, row, col);
           return;
         }
       }
@@ -101,5 +108,36 @@ class TaskListCubit extends Cubit<TaskListState> {
             .every((cell) => cell == currentPlayer) ||
         List.generate(boardSize, (index) => board[index][boardSize - index - 1])
             .every((cell) => cell == currentPlayer));
+  }
+
+  void startTaskTimer(TaskModel task, ValueNotifier<int> taskTimerNotifier,
+      ValueNotifier<TaskStatus> taskStatusNotifier) {
+    DateTime dueDateTime = task.dueTime.toDate();
+    int totalSeconds = dueDateTime.minute * 60 + dueDateTime.second;
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (totalSeconds > 0) {
+        totalSeconds--;
+        taskTimerNotifier.value = totalSeconds;
+
+        if (taskStatusNotifier.value != TaskStatus.assigned) {
+          timer.cancel();
+        }
+      } else {
+        timer.cancel();
+        taskStatusNotifier.value = TaskStatus.completed;
+        emit(TaskListGameFinished(winner: 'TimeOut', task.id));
+      }
+    });
+  }
+
+  void stopTimerForTask(String taskId) {
+    _timer?.cancel();
+  }
+
+  @override
+  Future<void> close() {
+    _timer?.cancel();
+    return super.close();
   }
 }
