@@ -83,7 +83,7 @@ class _TaskItemState extends State<TaskItem> {
               int minutesLeft = remainingSeconds ~/ 60;
               int secondsLeft = remainingSeconds % 60;
               return Text(
-                "$minutesLeft:$secondsLeft",
+                "${minutesLeft.toString().padLeft(2, '0')}:${secondsLeft.toString().padLeft(2, '0')}",
               );
             },
           );
