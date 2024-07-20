@@ -74,7 +74,7 @@ class TaskListBlocBuilder extends StatelessWidget {
             } else if (state is TaskListSuccess) {
               return setupSuccess(context, state.listTask);
             } else if (state is TaskListNoResultsFound) {
-              return setupEmpty(state.status);
+              return setupEmpty(context, state.status);
             }
 
             return const SizedBox.shrink();
@@ -105,18 +105,22 @@ class TaskListBlocBuilder extends StatelessWidget {
     );
   }
 
-  Widget setupEmpty(String status) {
+  Widget setupEmpty(BuildContext context, String status) {
     return Expanded(
-      child: Center(child: placeholderTaskStatus(status)),
+      child: Center(child: placeholderTaskStatus(context, status)),
     );
   }
 }
 
-Widget placeholderTaskStatus(String status) {
+Widget placeholderTaskStatus(BuildContext context, String status) {
   if (status == TaskStatus.assigned.name) {
     return const Text("Assign tasks to play Tic Tac Toe");
   } else if (status == TaskStatus.unassigned.name) {
-    return ElevatedButton(onPressed: () {}, child: const Text("Reload Tasks"));
+    return ElevatedButton(
+        onPressed: () async {
+          context.read<TaskListCubit>().reloadTasks();
+        },
+        child: const Text("Reload Tasks"));
   } else if (status == TaskStatus.completed.name) {
     return const Text("There is no completed tasks");
   }

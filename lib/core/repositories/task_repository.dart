@@ -106,7 +106,7 @@ class TaskRepository {
     }
   }
 
-  Future<List<TaskModel>> reloadTasks() async {
+  Future<void> reloadTasks() async {
     try {
       QuerySnapshot<Object?> snapshot = await _firestore
           .collection(FirestoreCollections.users)
@@ -124,7 +124,6 @@ class TaskRepository {
         await updateTaskArchive(task.id, false);
       }
 
-      return tasks;
     } catch (e) {
       rethrow;
     }

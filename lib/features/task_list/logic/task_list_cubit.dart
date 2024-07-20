@@ -38,6 +38,17 @@ class TaskListCubit extends Cubit<TaskListState> {
     }
   }
 
+  Future<void> reloadTasks() async {
+    emit(TaskListLoading());
+    try {
+      await _repository.reloadTasks();
+      var tasks = await _repository.getTasks(selectedStatus);
+      emit(TaskListSuccess(tasks));
+    } catch (e) {
+      emit(TaskListFailure(e.toString()));
+    }
+  }
+
   Future<void> updateTask(String taskId, String status) async {
     emit(TaskListUpdateLoading());
 
@@ -45,7 +56,7 @@ class TaskListCubit extends Cubit<TaskListState> {
       if (await _canUpdateTask()) {
         await _repository.updateTask(taskId, status);
         emit(TaskListUpdated());
-        getTasks(selectedStatus);
+        await getTasks(selectedStatus);
       } else {
         emit(TaskListFailure("You have an assigned task"));
       }
