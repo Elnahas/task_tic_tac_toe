@@ -19,7 +19,8 @@ class TaskListBlocBuilder extends StatelessWidget {
       listenWhen: (previous, current) =>
           current is TaskListUpdated ||
           current is TaskListUpdateLoading ||
-          current is TaskListFailure,
+          current is TaskListFailure || 
+          current is TaskListGameFinished  ,
       listener: (context, state) {
         if (state is TaskListUpdateLoading) {
           showDialog(
@@ -30,12 +31,21 @@ class TaskListBlocBuilder extends StatelessWidget {
                       CircularProgressIndicator(color: AppColors.primaryColor),
                 );
               });
-              } else if (state is TaskListFailure) {
-                context.pop();
-                appShowDialog(context, state.error);
+        } else if (state is TaskListFailure) {
+          context.pop();
+          appShowDialog(context, state.error);
+        }
+        else if (state is TaskListGameFinished) {
+          appShowDialog(context, state.winner == "Draw"
+                  ? 'It\'s a Draw!'
+                  : "Winner is Player ${state.winner}" , onPressed: () {
+                    context.pop();
+                    context.read<TaskListCubit>().initializeGame();
+                    context.read<TaskListCubit>().getTasks(context.read<TaskListCubit>().selectedStatus);
 
-              
-        } else if (state is TaskListUpdated) {
+                  },);
+        }
+         else if (state is TaskListUpdated) {
           context.pop();
         }
       },
@@ -49,7 +59,7 @@ class TaskListBlocBuilder extends StatelessWidget {
             if (state is TaskListLoading) {
               return setupLoading();
             } else if (state is TaskListSuccess) {
-              return setupSuccess(state.listTask);
+              return setupSuccess(context, state.listTask);
             } else if (state is TaskListNoResultsFound) {
               return setupEmpty(state.status);
             }
@@ -62,26 +72,28 @@ class TaskListBlocBuilder extends StatelessWidget {
   }
 
   Widget setupLoading() {
-    return const Center(
-      child: CircularProgressIndicator(),
+    return const Expanded(
+      child:  Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 
-  Widget setupSuccess(List<TaskModel> tasks) {
+  Widget setupSuccess(BuildContext context, List<TaskModel> tasks) {
     return SingleChildScrollView(
-      child: Expanded(
-        child: Column(
-          children: [
-            TaskListView(tasks: tasks),
-            const TicTacToeBoard(),
-          ],
-        ),
+      child: Column(
+        children: [
+          TaskListView(tasks: tasks),
+          const TicTacToeBoard(),
+        ],
       ),
     );
   }
 
   Widget setupEmpty(String status) {
-    return Center(child: placeholderTaskStatus(status));
+    return Expanded(
+      child: Center(child: placeholderTaskStatus(status)),
+    );
   }
 }
 

@@ -4,11 +4,13 @@ import 'package:task_tic_tac_toe/core/helpers/extensions.dart';
 
 import '../widgets/app_elevated_button.dart';
 
-Future<void> appShowDialog(BuildContext context, String error) {
+Future<void> appShowDialog(BuildContext context, String error , {Function()? onPressed}) {
   return showDialog(
+    barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
+          
           content: Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Text(
@@ -21,7 +23,7 @@ Future<void> appShowDialog(BuildContext context, String error) {
             Center(
               child: AppElevatedButton(
                 buttonText: "Ok",
-                onPressed: () {
+                onPressed: onPressed ?? () {
                   context.pop();
                 },
                 width: 70.w,
