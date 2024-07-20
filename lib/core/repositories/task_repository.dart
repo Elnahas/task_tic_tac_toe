@@ -69,4 +69,21 @@ class TaskRepository {
       rethrow;
     }
   }
+
+  Future<bool> hasAssigned() async {
+    try {
+      Query query = _firestore
+          .collection(FirestoreCollections.users)
+          .doc(_auth.currentUser!.uid)
+          .collection(FirestoreCollections.tasks);
+
+      query = query.where("status", isEqualTo: TaskStatus.assigned.name);
+
+      QuerySnapshot result = await query.limit(1).get();
+
+      return result.docs.isNotEmpty;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

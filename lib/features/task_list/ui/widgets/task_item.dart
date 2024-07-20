@@ -17,11 +17,16 @@ class TaskItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if(taskModel.status.name == TaskStatus.unassigned.name){
-
-          context.read<TaskListCubit>().updateTask(taskModel.id , TaskStatus.assigned.name);
-
-        }
+        if (taskModel.status.name == TaskStatus.unassigned.name) {
+          context
+              .read<TaskListCubit>()
+              .updateTask(taskModel.id, TaskStatus.assigned.name);
+        } 
+        // else if (taskModel.status.name == TaskStatus.assigned.name) {
+        //   context
+        //       .read<TaskListCubit>()
+        //       .updateTask(taskModel.id, TaskStatus.unassigned.name);
+        // }
       },
       child: Container(
         margin: const EdgeInsets.only(top: 10),
