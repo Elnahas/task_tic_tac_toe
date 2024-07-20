@@ -57,7 +57,7 @@ class TaskRepository {
     }
   }
 
-  void updateTask(String taskId, String status) async {
+  Future<void> updateTask(String taskId, String status) async {
     try {
       await _firestore
           .collection(FirestoreCollections.users)

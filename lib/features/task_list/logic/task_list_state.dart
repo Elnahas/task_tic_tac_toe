@@ -5,6 +5,8 @@ sealed class TaskListState {}
 final class TaskListInitial extends TaskListState {}
 
 final class TaskListLoading extends TaskListState {}
+final class TaskListUpdateLoading extends TaskListState {}
+final class TaskListUpdated extends TaskListState {}
 
 final class TaskListSuccess extends TaskListState {
   final List<TaskModel> listTask;

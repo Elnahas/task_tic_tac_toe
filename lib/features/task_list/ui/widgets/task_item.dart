@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/data/enum/task_status.dart';
 import '../../../../core/data/model/task_model.dart';
 import '../../../../core/helpers/date_helper.dart';
+import '../../logic/task_list_cubit.dart';
 
 class TaskItem extends StatelessWidget {
   final TaskModel taskModel;
@@ -16,6 +18,8 @@ class TaskItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if(taskModel.status.name == TaskStatus.unassigned.name){
+
+          context.read<TaskListCubit>().updateTask(taskModel.id , TaskStatus.assigned.name);
 
         }
       },
