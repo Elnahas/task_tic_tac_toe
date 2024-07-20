@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
-
 import '../data/enum/task_status.dart';
 import '../data/model/task_model.dart';
 import '../helpers/constants.dart';
@@ -14,7 +13,6 @@ class TaskRepository {
     required int numberOfTasks,
     required int sequenceOfTasks,
   }) async {
-
     for (int i = 0; i < numberOfTasks; i++) {
       DateTime now = DateTime.now();
       final dueTime = Timestamp.fromDate(
@@ -45,7 +43,10 @@ class TaskRepository {
           .doc(_auth.currentUser!.uid)
           .collection(FirestoreCollections.tasks);
 
-      query = query.where("status", isEqualTo: status).orderBy("title");
+      query = query
+          .where("status", isEqualTo: status)
+          .where("is_archive", isEqualTo: false)
+          .orderBy("title");
 
       QuerySnapshot<Object?> snapshot = await query.get();
 
@@ -91,15 +92,14 @@ class TaskRepository {
     }
   }
 
-
-    Future<void> updateTaskArchive(String taskId,bool isArchive ) async {
+  Future<void> updateTaskArchive(String taskId, bool isArchive) async {
     try {
       await _firestore
           .collection(FirestoreCollections.users)
           .doc(_auth.currentUser!.uid)
           .collection(FirestoreCollections.tasks)
           .doc(taskId)
-          .update({"is_archive": isArchive});
+          .update({"is_archive": isArchive, "status": TaskStatus.unassigned.name});
     } catch (e) {
       rethrow;
     }

@@ -54,6 +54,17 @@ class TaskListCubit extends Cubit<TaskListState> {
     }
   }
 
+  Future<void> updateTaskArchive(String taskId, bool isArchive) async {
+    emit(TaskListUpdateLoading());
+    try {
+      await _repository.updateTaskArchive(taskId, isArchive);
+      emit(TaskListUpdated());
+      getTasks(selectedStatus);
+    } catch (e) {
+      emit(TaskListFailure(e.toString()));
+    }
+  }
+
   Future<bool> _canUpdateTask() async {
     if (selectedStatus == TaskStatus.unassigned.name) {
       return !(await _repository.hasAssigned());
@@ -115,7 +126,7 @@ class TaskListCubit extends Cubit<TaskListState> {
     DateTime dueDateTime = task.dueTime.toDate();
     int totalSeconds = dueDateTime.minute * 60 + dueDateTime.second;
 
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
       if (totalSeconds > 0) {
         totalSeconds--;
         taskTimerNotifier.value = totalSeconds;

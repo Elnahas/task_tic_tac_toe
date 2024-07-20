@@ -36,7 +36,7 @@ class TaskListBlocBuilder extends StatelessWidget {
           appShowDialog(context, state.error);
         } else if (state is TaskListGameFinished) {
           appShowDialog(
-           context,
+            context,
             state.winner == 'TimeOut'
                 ? 'Time is ended try with another one!'
                 : (state.winner == "Draw"
@@ -49,6 +49,10 @@ class TaskListBlocBuilder extends StatelessWidget {
                 context
                     .read<TaskListCubit>()
                     .updateTask(state.taskId, TaskStatus.completed.name);
+              } else if (state.winner == "TimeOut") {
+                context
+                    .read<TaskListCubit>()
+                    .updateTaskArchive(state.taskId, true);
               }
 
               //context.read<TaskListCubit>().getTasks(context.read<TaskListCubit>().selectedStatus);
