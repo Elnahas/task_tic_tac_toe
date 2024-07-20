@@ -23,6 +23,7 @@ class TaskRepository {
 
       final taskId = const Uuid().v4();
       final task = TaskModel(
+        isArchive: false,
         id: taskId,
         title: "Task ${i + 1}",
         status: TaskStatus.unassigned,
@@ -85,6 +86,20 @@ class TaskRepository {
       QuerySnapshot result = await query.limit(1).get();
 
       return result.docs.isNotEmpty;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
+    Future<void> updateTaskArchive(String taskId,bool isArchive ) async {
+    try {
+      await _firestore
+          .collection(FirestoreCollections.users)
+          .doc(_auth.currentUser!.uid)
+          .collection(FirestoreCollections.tasks)
+          .doc(taskId)
+          .update({"is_archive": isArchive});
     } catch (e) {
       rethrow;
     }

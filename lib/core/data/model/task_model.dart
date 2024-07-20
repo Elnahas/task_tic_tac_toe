@@ -10,6 +10,8 @@ part 'task_model.g.dart';
 class TaskModel {
   final String id;
   final String title;
+  @JsonKey(name: 'is_archive')
+  final bool isArchive;
   @JsonKey(fromJson: TaskStatusExtension.fromString, toJson: _taskStatusToJson)
   final TaskStatus status;
   @JsonKey(
@@ -17,6 +19,7 @@ class TaskModel {
   final Timestamp dueTime;
 
   TaskModel({
+    required this.isArchive,
     required this.id,
     required this.title,
     required this.status,
