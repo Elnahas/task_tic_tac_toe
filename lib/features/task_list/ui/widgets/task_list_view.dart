@@ -13,6 +13,7 @@ class TaskListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      shrinkWrap: true,
       itemBuilder: (context, index) => TaskItem(
         taskModel: tasks[index],
       ),

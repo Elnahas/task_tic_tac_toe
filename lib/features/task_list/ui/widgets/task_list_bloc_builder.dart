@@ -4,6 +4,7 @@ import 'package:task_tic_tac_toe/core/data/model/task_model.dart';
 import 'package:task_tic_tac_toe/core/helpers/extensions.dart';
 import 'package:task_tic_tac_toe/features/task_list/logic/task_list_cubit.dart';
 import 'package:task_tic_tac_toe/features/task_list/ui/widgets/task_list_view.dart';
+import 'package:task_tic_tac_toe/features/task_list/ui/widgets/tic_tac_toe_board.dart';
 
 import '../../../../core/data/enum/task_status.dart';
 import '../../../../core/helpers/app_show_dialog.dart';
@@ -67,7 +68,16 @@ class TaskListBlocBuilder extends StatelessWidget {
   }
 
   Widget setupSuccess(List<TaskModel> tasks) {
-    return TaskListView(tasks: tasks);
+    return SingleChildScrollView(
+      child: Expanded(
+        child: Column(
+          children: [
+            TaskListView(tasks: tasks),
+            const TicTacToeBoard(),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget setupEmpty(String status) {

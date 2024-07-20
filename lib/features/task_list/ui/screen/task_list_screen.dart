@@ -18,7 +18,7 @@ class TaskListScreen extends StatelessWidget {
             children: [
               const TaskStatusListView(),
               verticalSpace(10),
-               const Expanded(child: TaskListBlocBuilder()),
+               TaskListBlocBuilder(),
             ],
           ),
         ));
