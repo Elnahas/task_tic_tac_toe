@@ -139,7 +139,7 @@ class TaskListCubit extends Cubit<TaskListState> {
     DateTime dueDateTime = task.dueTime.toDate();
     int totalSeconds = dueDateTime.minute * 60 + dueDateTime.second;
 
-    _timer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (totalSeconds > 0) {
         totalSeconds--;
         taskTimerNotifier.value = totalSeconds;
