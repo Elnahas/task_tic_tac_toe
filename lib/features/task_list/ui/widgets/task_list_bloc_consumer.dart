@@ -10,8 +10,8 @@ import '../../../../core/data/enum/task_status.dart';
 import '../../../../core/helpers/app_show_dialog.dart';
 import '../../../../core/theming/app_colors.dart';
 
-class TaskListBlocBuilder extends StatelessWidget {
-  const TaskListBlocBuilder({super.key});
+class TaskListBlocConsumer extends StatelessWidget {
+  const TaskListBlocConsumer({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,7 @@ import 'package:task_tic_tac_toe/core/helpers/spacing.dart';
 import 'package:task_tic_tac_toe/core/widgets/custom_app_bar.dart';
 import 'package:task_tic_tac_toe/features/task_list/ui/widgets/task_status_list_view.dart';
 
-import '../widgets/task_list_bloc_builder.dart';
+import '../widgets/task_list_bloc_consumer.dart';
 
 class TaskListScreen extends StatelessWidget {
   const TaskListScreen({super.key});
@@ -18,7 +18,7 @@ class TaskListScreen extends StatelessWidget {
             children: [
               const TaskStatusListView(),
               verticalSpace(10),
-               TaskListBlocBuilder(),
+               TaskListBlocConsumer(),
             ],
           ),
         ));

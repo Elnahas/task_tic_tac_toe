@@ -68,7 +68,11 @@ class _TicTacToeBoardState extends State<TicTacToeBoard> {
                           borderRadius: BorderRadius.circular(10)),
                       child: Center(
                         child: Text(_cubit.board[row][col],
-                            style: TextStyle(fontSize: 40.sp , color: _cubit.board[row][col] == "X" ? Colors.blue : Colors.red )),
+                            style: TextStyle(
+                                fontSize: 40.sp,
+                                color: _cubit.board[row][col] == "X"
+                                    ? Colors.blue
+                                    : Colors.red)),
                       ),
                     ),
                   );
