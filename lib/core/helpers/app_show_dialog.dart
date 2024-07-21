@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_tic_tac_toe/core/helpers/extensions.dart';
 
+import '../theming/app_colors.dart';
 import '../widgets/app_elevated_button.dart';
 
 Future<void> appShowDialog(BuildContext context, String error , {Function()? onPressed}) {
@@ -32,4 +33,15 @@ Future<void> appShowDialog(BuildContext context, String error , {Function()? onP
           ],
         );
       });
+}
+
+void showLoadingDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.primaryColor),
+      );
+    },
+  );
 }
