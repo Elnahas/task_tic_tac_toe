@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_tic_tac_toe/core/helpers/spacing.dart';
+import '../../../../core/helpers/app_strings.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
 import '../widgets/add_task_form.dart';
 
@@ -11,7 +12,7 @@ class AddTaskScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: const CustomAppBar(
-          title: "tic tac toe",
+          title: AppStrings.appName,
         ),
         body: Container(
           margin: const EdgeInsets.symmetric(horizontal: 20),

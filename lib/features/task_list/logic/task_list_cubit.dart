@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_tic_tac_toe/core/data/enum/task_status.dart';
 import 'package:task_tic_tac_toe/core/data/model/task_model.dart';
+import 'package:task_tic_tac_toe/core/helpers/app_strings.dart';
+import 'package:task_tic_tac_toe/core/helpers/constants.dart';
 import 'package:task_tic_tac_toe/core/repositories/task_repository.dart';
 
 part 'task_list_state.dart';
@@ -17,7 +19,7 @@ class TaskListCubit extends Cubit<TaskListState> {
   static const int boardSize = 3;
   List<List<String>> board =
       List.generate(boardSize, (_) => List.filled(boardSize, ''));
-  String currentPlayer = 'X';
+  String currentPlayer = Constants.playerX;
   bool gameFinished = false;
 
   // Timer
@@ -58,7 +60,7 @@ class TaskListCubit extends Cubit<TaskListState> {
         emit(TaskListUpdated());
         await getTasks(selectedStatus);
       } else {
-        emit(TaskListFailure("You have an assigned task"));
+        emit(TaskListFailure(AppStrings.anAssignedTask));
       }
     } catch (e) {
       emit(TaskListFailure(e.toString()));
@@ -85,7 +87,7 @@ class TaskListCubit extends Cubit<TaskListState> {
 
   void initializeGame() {
     board = List.generate(boardSize, (_) => List.filled(boardSize, ''));
-    currentPlayer = 'X';
+    currentPlayer = Constants.playerX;
     gameFinished = false;
     stopTimerForTask(selectedTaskAssignedId);
   }
@@ -100,12 +102,12 @@ class TaskListCubit extends Cubit<TaskListState> {
       } else if (board.expand((e) => e).every((cell) => cell.isNotEmpty)) {
         gameFinished = true;
         stopTimerForTask(taskModel.id);
-        emit(TaskListGameFinished(taskModel.id, winner: 'Draw'));
+        emit(TaskListGameFinished(taskModel.id, winner: Constants.draw));
       } else {
-        currentPlayer = currentPlayer == 'X' ? 'O' : 'X';
+        currentPlayer = currentPlayer == Constants.playerX ? Constants.playerO : Constants.playerX;
         emit(
             TaskListGameInProgress(board: board, currentPlayer: currentPlayer));
-        if (currentPlayer == 'O' && !gameFinished) {
+        if (currentPlayer == Constants.playerO && !gameFinished) {
           makeComputerMove(taskModel);
         }
       }
@@ -148,7 +150,7 @@ class TaskListCubit extends Cubit<TaskListState> {
       } else {
         timer.cancel();
         taskStatusNotifier.value = TaskStatus.completed;
-        emit(TaskListGameFinished(winner: 'TimeOut', task.id));
+        emit(TaskListGameFinished(winner: Constants.timeOut, task.id));
       }
     });
   }
