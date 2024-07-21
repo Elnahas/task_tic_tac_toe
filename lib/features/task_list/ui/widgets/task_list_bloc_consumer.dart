@@ -53,6 +53,10 @@ class TaskListBlocConsumer extends StatelessWidget {
                 context
                     .read<TaskListCubit>()
                     .updateTaskArchive(state.taskId, true);
+              } else if (state.winner == "O" || state.winner == "Draw") {
+                context
+                    .read<TaskListCubit>()
+                    .getTasks(context.read<TaskListCubit>().selectedStatus);
               }
 
               //context.read<TaskListCubit>().getTasks(context.read<TaskListCubit>().selectedStatus);
