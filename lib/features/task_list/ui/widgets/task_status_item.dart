@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_tic_tac_toe/core/data/enum/task_status.dart';
+import 'package:task_tic_tac_toe/core/helpers/extensions.dart';
 
 import '../../../../core/theming/app_colors.dart';
+
 class TaskStatusItem extends StatelessWidget {
   const TaskStatusItem({
     super.key,
-    required this.selectedStateTaskIndex, required this.index,
+    required this.selectedStateTaskIndex,
+    required this.index,
   });
 
   final int selectedStateTaskIndex;
@@ -35,8 +38,11 @@ class TaskStatusItem extends StatelessWidget {
         ),
         child: Center(
             child: Text(
-          TaskStatus.values[index].name,
-          style:  TextStyle(color: selectedStateTaskIndex == index? Colors.white : Colors.black) ,
+          TaskStatus.values[index].name.capitalize(),
+          style: TextStyle(
+              color: selectedStateTaskIndex == index
+                  ? Colors.white
+                  : Colors.black),
         )));
   }
 }

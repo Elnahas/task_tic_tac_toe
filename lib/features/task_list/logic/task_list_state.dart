@@ -5,8 +5,11 @@ sealed class TaskListState {}
 final class TaskListInitial extends TaskListState {}
 
 final class TaskListLoading extends TaskListState {}
+
 final class TaskListUpdateLoading extends TaskListState {}
+
 final class TaskListUpdated extends TaskListState {}
+
 final class TaskListMovePlayer extends TaskListState {}
 
 final class TaskListSuccess extends TaskListState {
@@ -16,7 +19,7 @@ final class TaskListSuccess extends TaskListState {
 }
 
 final class TaskListNoResultsFound extends TaskListState {
-    final String status;
+  final String status;
   TaskListNoResultsFound(this.status);
 }
 
@@ -24,7 +27,6 @@ final class TaskListFailure extends TaskListState {
   final String error;
   TaskListFailure(this.error);
 }
-
 
 final class TaskListGameInProgress extends TaskListState {
   final List<List<String>> board;
@@ -38,17 +40,4 @@ final class TaskListGameFinished extends TaskListState {
   final String taskId;
 
   TaskListGameFinished(this.taskId, {required this.winner});
-
-
-
-}
-
-
-
-final class TaskListUpdateTimeLeft extends TaskListState {
-  final int minutesLeft;
-  final int secondsLeft;
-  final String taskId;
-
-  TaskListUpdateTimeLeft({required this.minutesLeft, required this.secondsLeft, required this.taskId});
 }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_tic_tac_toe/core/helpers/extensions.dart';
-import 'package:task_tic_tac_toe/core/theming/app_colors.dart';
 import 'package:task_tic_tac_toe/features/add_task/logic/add_task_cubit.dart';
-
 import '../../../../core/helpers/app_show_dialog.dart';
 import '../../../../core/routing/routes.dart';
 
@@ -36,13 +34,7 @@ class AddTaskBlocListener extends StatelessWidget {
   }
 
   setupLoading(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.primaryColor),
-          );
-        });
+    showLoadingDialog(context);
   }
 }
 
@@ -56,4 +48,3 @@ setupFailure(BuildContext context, String error) {
 
   appShowDialog(context, error);
 }
-

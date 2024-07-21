@@ -17,20 +17,23 @@ class TaskItem extends StatefulWidget {
 class _TaskItemState extends State<TaskItem> {
   late ValueNotifier<TaskStatus> taskStatusNotifier;
   late ValueNotifier<int> taskTimerNotifier;
+  late TaskListCubit _cubit;
 
   @override
   void initState() {
-    super.initState();
+    _cubit = context.read<TaskListCubit>();
+
     taskStatusNotifier = ValueNotifier<TaskStatus>(widget.taskModel.status);
     taskTimerNotifier = ValueNotifier<int>(
         widget.taskModel.dueTime.toDate().minute * 60 +
             widget.taskModel.dueTime.toDate().second);
 
-    final taskListCubit = context.read<TaskListCubit>();
     if (widget.taskModel.status == TaskStatus.assigned) {
-      taskListCubit.startTaskTimer(
+      _cubit.startTaskTimer(
           widget.taskModel, taskTimerNotifier, taskStatusNotifier);
     }
+
+    super.initState();
   }
 
   @override
@@ -42,15 +45,8 @@ class _TaskItemState extends State<TaskItem> {
 
   @override
   Widget build(BuildContext context) {
-    final taskListCubit = context.read<TaskListCubit>();
-
     return GestureDetector(
-      onTap: () {
-        if (taskStatusNotifier.value == TaskStatus.unassigned) {
-          taskListCubit.updateTask(
-              widget.taskModel.id, TaskStatus.assigned.name);
-        }
-      },
+      onTap: _onTaskTap,
       child: Container(
         margin: const EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
@@ -63,6 +59,12 @@ class _TaskItemState extends State<TaskItem> {
         ),
       ),
     );
+  }
+
+  void _onTaskTap() {
+    if (taskStatusNotifier.value == TaskStatus.unassigned) {
+      _cubit.updateTask(widget.taskModel.id, TaskStatus.assigned.name);
+    }
   }
 
   Widget _buildTrailing() {
@@ -80,16 +82,20 @@ class _TaskItemState extends State<TaskItem> {
           return ValueListenableBuilder<int>(
             valueListenable: taskTimerNotifier,
             builder: (context, remainingSeconds, _) {
-              int minutesLeft = remainingSeconds ~/ 60;
-              int secondsLeft = remainingSeconds % 60;
-              return Text(
-                "${minutesLeft.toString().padLeft(2, '0')}:${secondsLeft.toString().padLeft(2, '0')}",
-              );
+              return _buildTimerText(remainingSeconds);
             },
           );
         }
         return const SizedBox.shrink();
       },
+    );
+  }
+
+  Widget _buildTimerText(int remainingSeconds) {
+    int minutesLeft = remainingSeconds ~/ 60;
+    int secondsLeft = remainingSeconds % 60;
+    return Text(
+      "${minutesLeft.toString().padLeft(2, '0')}:${secondsLeft.toString().padLeft(2, '0')}",
     );
   }
 }

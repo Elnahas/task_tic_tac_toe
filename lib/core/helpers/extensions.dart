@@ -18,3 +18,7 @@ extension Navigation on BuildContext {
 
   void pop() => Navigator.of(this).pop();
 }
+
+extension StringExtension on String {
+   String capitalize() => this[0].toUpperCase() + substring(1);
+}
