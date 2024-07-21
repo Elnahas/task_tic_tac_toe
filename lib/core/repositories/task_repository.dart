@@ -13,11 +13,11 @@ class TaskRepository {
     required int numberOfTasks,
     required int sequenceOfTasks,
   }) async {
+    final now = Timestamp.now();
     for (int i = 0; i < numberOfTasks; i++) {
-      DateTime now = DateTime.now();
+
       final dueTime = Timestamp.fromDate(
-        now.add(Duration(minutes: sequenceOfTasks * (i + 1))),
-      );
+          now.toDate().add(Duration(minutes: sequenceOfTasks * (i + 1))));
 
       final taskId = const Uuid().v4();
       final task = TaskModel(
@@ -123,7 +123,6 @@ class TaskRepository {
       for (var task in tasks) {
         await updateTaskArchive(task.id, false);
       }
-
     } catch (e) {
       rethrow;
     }
