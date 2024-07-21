@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
           ),
           onGenerateRoute: appRouter.onGenerateRoute,
-          initialRoute: Routes.taskList,
+          initialRoute: Routes.splash,
         );
       },
     );
