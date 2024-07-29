@@ -9,13 +9,33 @@ class TaskRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> createTasks({
-    required int numberOfTasks,
-    required int sequenceOfTasks,
-  }) async {
+Future<void> createTasks({
+  required int numberOfTasks,
+  required int sequenceOfTasks,
+}) async {
+  try {
+    var collection = _firestore
+        .collection(FirestoreCollections.users)
+        .doc(_auth.currentUser!.uid)
+        .collection(FirestoreCollections.tasks);
+
+    // Fetch current documents
+    var snapshots = await collection.get();
+
+    // Create a batch
+    var batch = _firestore.batch();
+
+    // Add delete operations to the batch
+    for (var doc in snapshots.docs) {
+      batch.delete(doc.reference);
+    }
+
+    // Commit the batch to delete current documents
+    await batch.commit();
+
+    // Create new tasks
     final now = Timestamp.now();
     for (int i = 0; i < numberOfTasks; i++) {
-
       final dueTime = Timestamp.fromDate(
           now.toDate().add(Duration(minutes: sequenceOfTasks * (i + 1))));
 
@@ -27,14 +47,12 @@ class TaskRepository {
         status: TaskStatus.unassigned,
         dueTime: dueTime,
       );
-      await _firestore
-          .collection(FirestoreCollections.users)
-          .doc(_auth.currentUser!.uid)
-          .collection(FirestoreCollections.tasks)
-          .doc(taskId)
-          .set(task.toJson());
+      await collection.doc(taskId).set(task.toJson());
     }
+  } catch (e) {
+    rethrow;
   }
+}
 
   Future<List<TaskModel>> getTasks(String status) async {
     try {
@@ -127,4 +145,5 @@ class TaskRepository {
       rethrow;
     }
   }
+
 }
