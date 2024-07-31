@@ -72,6 +72,9 @@ class TaskListBlocConsumer extends StatelessWidget {
   }
 
   void _handleGameFinished(BuildContext context, TaskListGameFinished state) {
+    context.read<TaskListCubit>().initializeGame();
+    _handleTaskUpdateBasedOnWinner(context, state);
+
     String message;
     if (state.winner == Constants.timeOut) {
       message = AppStrings.timeEnded;
@@ -86,25 +89,25 @@ class TaskListBlocConsumer extends StatelessWidget {
       message,
       onPressed: () {
         context.pop();
-        context.read<TaskListCubit>().initializeGame();
-        _handleTaskUpdateBasedOnWinner(context, state);
       },
     );
   }
 
   void _handleTaskUpdateBasedOnWinner(
       BuildContext context, TaskListGameFinished state) {
+    var cubit = context.read<TaskListCubit>();
     if (state.winner == Constants.playerX) {
-      context
-          .read<TaskListCubit>()
-          .updateTask(state.taskId, TaskStatus.completed.name);
+      cubit.updateTask(state.taskModel.id, TaskStatus.completed.name);
     } else if (state.winner == Constants.timeOut) {
-      context.read<TaskListCubit>().updateTaskArchive(state.taskId, true);
+      if (cubit.selectedTaskAssignedId == state.taskModel.id) {
+        cubit.updateTask(state.taskModel.id, TaskStatus.unassigned.name);
+        cubit.selectedTaskAssignedId = "";
+      } else {
+        cubit.updateTaskArchive(state.taskModel.id, true);
+      }
     } else if (state.winner == Constants.playerO ||
         state.winner == Constants.draw) {
-      context
-          .read<TaskListCubit>()
-          .getTasks(context.read<TaskListCubit>().selectedStatus);
+      cubit.getTasks(context.read<TaskListCubit>().selectedStatus);
     }
   }
 
@@ -136,12 +139,13 @@ class TaskListBlocConsumer extends StatelessWidget {
   }
 
   Widget _placeholderTaskStatus(BuildContext context, String status) {
+    var cubit = context.read<TaskListCubit>();
     if (status == TaskStatus.assigned.name) {
       return const Text(AppStrings.noTasksAssigned);
     } else if (status == TaskStatus.unassigned.name) {
       return ElevatedButton(
         onPressed: () async {
-          context.read<TaskListCubit>().reloadTasks();
+          cubit.getTasks(cubit.selectedStatus, reload: true);
         },
         child: const Text(AppStrings.reloadTasks),
       );
