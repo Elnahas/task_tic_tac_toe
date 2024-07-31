@@ -143,12 +143,12 @@ class TaskListBlocConsumer extends StatelessWidget {
     if (status == TaskStatus.assigned.name) {
       return const Text(AppStrings.noTasksAssigned);
     } else if (status == TaskStatus.unassigned.name) {
-      return ElevatedButton(
+      return cubit.selectedTaskAssignedId.isEmpty ? ElevatedButton(
         onPressed: () async {
           cubit.getTasks(cubit.selectedStatus, reload: true);
         },
         child: const Text(AppStrings.reloadTasks),
-      );
+      ): const SizedBox.shrink();
     } else if (status == TaskStatus.completed.name) {
       return const Text(AppStrings.noCompletedTasks);
     }
