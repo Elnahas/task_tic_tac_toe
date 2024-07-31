@@ -72,7 +72,10 @@ class TaskListBlocConsumer extends StatelessWidget {
   }
 
   void _handleGameFinished(BuildContext context, TaskListGameFinished state) {
-    context.read<TaskListCubit>().initializeGame();
+
+var cubit =     context.read<TaskListCubit>();
+    cubit.initializeGame();
+
     _handleTaskUpdateBasedOnWinner(context, state);
 
     String message;
@@ -88,6 +91,11 @@ class TaskListBlocConsumer extends StatelessWidget {
       context,
       message,
       onPressed: () {
+
+        if(cubit.selectedStatus == TaskStatus.assigned.name){
+          cubit.timeOutReturnUnassigned();
+        }
+        
         context.pop();
       },
     );
@@ -120,12 +128,14 @@ class TaskListBlocConsumer extends StatelessWidget {
   }
 
   Widget _setupSuccess(BuildContext context, List<TaskModel> tasks) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          TaskListView(tasks: tasks),
-          if (tasks.isNotEmpty) TicTacToeBoard(taskModel: tasks[0]),
-        ],
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            TaskListView(tasks: tasks),
+            if (tasks.isNotEmpty) TicTacToeBoard(taskModel: tasks[0]),
+          ],
+        ),
       ),
     );
   }

@@ -41,3 +41,7 @@ final class TaskListGameFinished extends TaskListState {
 
   TaskListGameFinished(this.taskModel, {required this.winner});
 }
+
+final class TimeOutReturnUnassigned extends TaskListState {
+  TimeOutReturnUnassigned();
+}

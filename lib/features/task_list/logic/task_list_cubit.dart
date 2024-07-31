@@ -178,4 +178,8 @@ void makeMove(TaskModel taskModel, int row, int col) {
   void stopTimer(String taskId) {
     taskTimers.remove(taskId);
   }
+
+  void timeOutReturnUnassigned() {
+    emit(TimeOutReturnUnassigned());
+  }
 }
