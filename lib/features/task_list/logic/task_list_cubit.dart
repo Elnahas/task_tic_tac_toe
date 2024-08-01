@@ -164,7 +164,7 @@ void makeMove(TaskModel taskModel, int row, int col) {
   }
 
   void _startTimer(TaskModel taskModel) {
-    Timer.periodic(const Duration(milliseconds: 500), (timer) {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
       if (taskTimers[taskModel.id]?.value == 0) {
         timer.cancel();
         emit(TaskListGameFinished(winner: Constants.timeOut, taskModel));
