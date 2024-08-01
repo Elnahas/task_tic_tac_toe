@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_tic_tac_toe/core/data/enum/task_status.dart';
+import 'package:task_tic_tac_toe/core/helpers/constants.dart';
 import 'package:task_tic_tac_toe/features/task_list/logic/task_list_cubit.dart';
 import 'package:task_tic_tac_toe/features/task_list/ui/widgets/task_status_item.dart';
 
@@ -18,31 +19,49 @@ class _TaskStatusListViewState extends State<TaskStatusListView> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: 60.h,
-        width: double.infinity,
-        child: ListView.builder(
-          physics: const BouncingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: GestureDetector(
-                onTap: () {
-                  if(selectedStateTaskIndex != index){
-                  var status = TaskStatus.values[index].name;
-                  context.read<TaskListCubit>().getTasks( status);
-                  selectedStateTaskIndex = index;
-                   context.read<TaskListCubit>().initializeGame();
-                  setState(() {});
-                  }
-                },
-                child: TaskStatusItem(
-                    selectedStateTaskIndex: selectedStateTaskIndex, index: index),
-              ),
-            );
-          },
-          itemCount: TaskStatus.values.length,
-        ));
+    return BlocListener<TaskListCubit, TaskListState>(
+      listener: (context, state) {
+        if (state is TimeOutReturnUnassigned) {
+          setState(() {
+            selectedStateTaskIndex = TaskStatus.unassigned.index;
+          });
+          context.read<TaskListCubit>().getTasks(TaskStatus.unassigned.name);
+        }
+      },
+      child: BlocBuilder<TaskListCubit, TaskListState>(
+        buildWhen: (previous, current) => current is! TimeOutReturnUnassigned,
+        builder: (context, state) {
+          return SizedBox(
+            height: 60.h,
+            width: double.infinity,
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (selectedStateTaskIndex != index) {
+                        var status = TaskStatus.values[index].name;
+                        context.read<TaskListCubit>().getTasks(status);
+                        setState(() {
+                          selectedStateTaskIndex = index;
+                        });
+                      }
+                    },
+                    child: TaskStatusItem(
+                      selectedStateTaskIndex: selectedStateTaskIndex,
+                      index: index,
+                    ),
+                  ),
+                );
+              },
+              itemCount: TaskStatus.values.length,
+            ),
+          );
+        },
+      ),
+    );
   }
 }

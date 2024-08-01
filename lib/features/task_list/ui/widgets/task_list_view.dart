@@ -13,6 +13,7 @@ class TaskListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (context, index) => TaskItem(
         taskModel: tasks[index],
